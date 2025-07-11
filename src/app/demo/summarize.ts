@@ -2,7 +2,6 @@
 
 import { z } from 'zod';
 import { generateObject } from 'ai';
-import { groq } from '@ai-sdk/groq';
 import { openai } from '@ai-sdk/openai';
 
 const schema = z.object({

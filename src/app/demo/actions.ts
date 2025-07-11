@@ -1,9 +1,23 @@
-// app/actions/fetchGoogleNews.ts
 'use server';
 
 import { parseStringPromise } from 'xml2js';
 
-export async function fetchGoogleNews(query: string = ''): Promise<{
+type RssItem = {
+  title?: string[];
+  description?: string[];
+};
+
+type ParsedRss = {
+  rss?: {
+    channel?: {
+      item?: RssItem[];
+    }[];
+  };
+};
+
+export async function fetchGoogleNews(
+  query: string = ''
+): Promise<{
   success: boolean;
   content?: { title: string; content: string }[];
   error?: string;
@@ -32,7 +46,7 @@ export async function fetchGoogleNews(query: string = ''): Promise<{
       throw new Error('Invalid or empty RSS feed received');
     }
 
-    const parsedData = await parseStringPromise(xmlData, {
+    const parsedData: ParsedRss = await parseStringPromise(xmlData, {
       trim: true,
       normalizeTags: true,
       normalize: true,
@@ -44,9 +58,9 @@ export async function fetchGoogleNews(query: string = ''): Promise<{
       throw new Error('No news items found in the RSS feed');
     }
 
-    const newsItems = items.map((item: any) => {
-      const title = item.title?.[0] || 'No title';
-      const content = item.description?.[0] || 'No content';
+    const newsItems = items.map((item: RssItem) => {
+      const title = item.title?.[0] ?? 'No title';
+      const content = item.description?.[0] ?? 'No content';
       const cleanContent = content.replace(/<[^>]+>/g, '').trim();
       return { title, content: cleanContent };
     });
@@ -56,11 +70,12 @@ export async function fetchGoogleNews(query: string = ''): Promise<{
       content: newsItems,
       fetchedAt: new Date().toISOString(),
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Failed to fetch news';
     console.error('Error fetching Google News:', error);
     return {
       success: false,
-      error: error.message || 'Failed to fetch news',
+      error: message,
       fetchedAt: new Date().toISOString(),
     };
   }

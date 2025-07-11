@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button";
-import { Headphones, ArrowLeft, CloudCog } from "lucide-react";
+import { Headphones, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { fetchGoogleNews } from "./actions";
 import { useTransition, useState } from "react";
