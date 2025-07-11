@@ -18,6 +18,7 @@ import {
   Download,
 } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
+import Link from "next/link"
 
 export default function LandingPage() {
   return (
@@ -50,7 +51,7 @@ export default function LandingPage() {
           Powered by Advanced AI
         </Badge>
 
-        <h1 className="max-w-7xl mx-auto text-5xl md:text-7xl font-bold text-black dark:text-white mb-6 leading-tight">
+        <h1 className="w-full max-w-7xl mx-auto text-3xl md:text-7xl font-bold text-black dark:text-white mb-6 leading-tight">
           Transform News Into
           <span className="bg-gradient-to-r from-black to-gray-600 dark:from-white dark:to-gray-400 bg-clip-text text-transparent">
             {" "}
@@ -58,7 +59,7 @@ export default function LandingPage() {
           </span>
         </h1>
 
-        <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+        <p className="text-sm md:text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
           Stay informed with AI-generated podcasts that turn breaking news and trending stories into engaging 2-minute
           audio experiences. Perfect for your commute, workout, or coffee break.
         </p>
@@ -76,26 +77,29 @@ export default function LandingPage() {
           <Button
             variant="outline"
             size="lg"
+            asChild
             className="border-gray-400 text-gray-700 hover:bg-gray-100 hover:border-gray-500 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:border-gray-400 px-8 py-6 text-lg rounded-xl bg-transparent transition-all duration-200"
           >
-            <Headphones className="w-5 h-5 mr-2" />
-            Listen to Demo
+            <Link href="/demo">
+              <Headphones className="w-5 h-5 mr-2" />
+              Listen to Demo
+            </Link>
           </Button>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-2xl mx-auto">
+        <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto">
           <div className="text-center">
-            <div className="text-3xl font-bold text-black dark:text-white mb-2">10K+</div>
-            <div className="text-gray-600 dark:text-gray-400">Daily Podcasts Generated</div>
+            <div className="text-xl md:text-3xl font-bold text-black dark:text-white mb-2">10K+</div>
+            <div className="text-gray-600 dark:text-gray-400 text-sm md:text-base">Daily Podcasts Generated</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold text-gray-700 dark:text-gray-300 mb-2">2 Min</div>
-            <div className="text-gray-600 dark:text-gray-400">Average Listen Time</div>
+            <div className="text-xl md:text-3xl font-bold text-gray-700 dark:text-gray-300 mb-2">2 Min</div>
+            <div className="text-gray-600 dark:text-gray-400 text-sm md:text-base">Average Listen Time</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-2">50+</div>
-            <div className="text-gray-600 dark:text-gray-400">News Sources</div>
+            <div className="text-xl md:text-3xl font-bold text-gray-800 dark:text-gray-200 mb-2">50+</div>
+            <div className="text-gray-600 dark:text-gray-400 text-sm md:text-bases">News Sources</div>
           </div>
         </div>
       </section>
