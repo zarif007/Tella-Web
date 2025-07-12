@@ -2,7 +2,6 @@
 
 import { z } from 'zod';
 import { generateObject } from 'ai';
-import { openai } from '@ai-sdk/openai';
 import { groq } from '@ai-sdk/groq';
 
 const schema = z.object({
@@ -12,7 +11,7 @@ const schema = z.object({
 // const model = openai('gpt-4o-mini');
 const model = groq('llama-3.3-70b-versatile');
 
-let systemPrompt = "You are a helpful assistant that summarizes (make sure dont add any special characters like *) in to one para news articles ";
+let systemPrompt = "You are a helpful assistant that summarizes (make sure dont add any special characters like *) in to one para news articles in max 200 words";
 
 const summarize = async (prompt: string) => {
     const { object } = await generateObject({
@@ -26,15 +25,14 @@ const summarize = async (prompt: string) => {
     return object;
 };
 
-const summarizeNews = async (news: { title: string, content: string }[] | string) => {
+const summarizeNews = async (news: { title: string, content: string }[] | string, prompt: string = systemPrompt) => {
     try {
+        systemPrompt = prompt;
         if (typeof news === 'string') {
-            systemPrompt += "in max 500 wrods"
             const res = await summarize(news);
             return res.content;
         }
 
-        systemPrompt += "in max 200 words"
         const results = await Promise.all(
             news.map(async (item, index) => {
                 const res = await summarize(item.content);

@@ -8,6 +8,7 @@ import { useTransition, useState } from "react";
 import summarizeNews from "./summarize";
 import AudioPlayer from "./AudioPlayer";
 import { convertTextToSpeech } from "./tts";
+import { summarizeAllNewsPrompt } from "@/constants/systemPrompts/summarizeAllNews";
 
 export default function DemoPage() {
     const [isPending, startTransition] = useTransition();
@@ -25,10 +26,9 @@ export default function DemoPage() {
                 }
             }
             const allSummaries = await summarizeNews(allResults);
-            const summary = await summarizeNews(allSummaries || "");
+            const summary = await summarizeNews(allSummaries || "", summarizeAllNewsPrompt);
             if (typeof summary === 'string' && summary.trim().length > 0) {
                 const result = await convertTextToSpeech(summary);
-                console.log(result)
                 if (result.success && result.audioBlob) {
                     const audioUrl = URL.createObjectURL(result.audioBlob);
                     setAudioUrl(audioUrl);

@@ -5,6 +5,7 @@ import { parseStringPromise } from 'xml2js';
 type RssItem = {
   title?: string[];
   description?: string[];
+  pubDate?: string[];
 };
 
 type ParsedRss = {
@@ -19,19 +20,28 @@ export async function fetchGoogleNews(
   query: string = ''
 ): Promise<{
   success: boolean;
-  content?: { title: string; content: string }[];
+  content?: { title: string; content: string; pubDate?: string }[];
   error?: string;
   fetchedAt: string;
 }> {
   try {
     const baseUrl = 'https://news.google.com/rss';
-    const rssUrl = query ? `${baseUrl}/search?q=${encodeURIComponent(query)}` : baseUrl;
+    const timestamp = new Date().getTime();
+    // Add time filter for recent news (last 1 hour)
+    const rssUrl = query
+      ? `${baseUrl}/search?q=${encodeURIComponent(query)}+when:1h&t=${timestamp}`
+      : `${baseUrl}?t=${timestamp}`;
+
+    console.log('Fetching from URL:', rssUrl); // Log the URL for debugging
 
     const response = await fetch(rssUrl, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/rss+xml',
         'User-Agent': 'Mozilla/5.0 (compatible; NewsFetcher/1.0)',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        Pragma: 'no-cache',
+        Expires: '0',
       },
       cache: 'no-store',
     });
@@ -62,8 +72,12 @@ export async function fetchGoogleNews(
       const title = item.title?.[0] ?? 'No title';
       const content = item.description?.[0] ?? 'No content';
       const cleanContent = content.replace(/<[^>]+>/g, '').trim();
-      return { title, content: cleanContent };
+      const pubDate = item.pubDate?.[0] ?? 'No publication date';
+      return { title, content: cleanContent, pubDate };
     });
+
+    // Log the fetched items for debugging
+    console.log('Fetched news items:', newsItems.map(item => ({ title: item.title, pubDate: item.pubDate })));
 
     return {
       success: true,
@@ -78,5 +92,5 @@ export async function fetchGoogleNews(
       error: message,
       fetchedAt: new Date().toISOString(),
     };
-  } ``
+  }
 }
