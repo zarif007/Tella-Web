@@ -28,6 +28,7 @@ export default function DemoPage() {
             const summary = await summarizeNews(allSummaries || "");
             if (typeof summary === 'string' && summary.trim().length > 0) {
                 const result = await convertTextToSpeech(summary);
+                console.log(result)
                 if (result.success && result.audioBlob) {
                     const audioUrl = URL.createObjectURL(result.audioBlob);
                     setAudioUrl(audioUrl);

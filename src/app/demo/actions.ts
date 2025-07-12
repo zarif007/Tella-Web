@@ -78,5 +78,5 @@ export async function fetchGoogleNews(
       error: message,
       fetchedAt: new Date().toISOString(),
     };
-  }
+  } ``
 }

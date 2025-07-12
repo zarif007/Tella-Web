@@ -3,12 +3,14 @@
 import { z } from 'zod';
 import { generateObject } from 'ai';
 import { openai } from '@ai-sdk/openai';
+import { groq } from '@ai-sdk/groq';
 
 const schema = z.object({
     content: z.string(),
 });
 
-const model = openai('gpt-4o-mini');
+// const model = openai('gpt-4o-mini');
+const model = groq('llama-3.3-70b-versatile');
 
 let systemPrompt = "You are a helpful assistant that summarizes (make sure dont add any special characters like *) in to one para news articles ";
 
@@ -27,12 +29,12 @@ const summarize = async (prompt: string) => {
 const summarizeNews = async (news: { title: string, content: string }[] | string) => {
     try {
         if (typeof news === 'string') {
-            systemPrompt += "in max 200 wrods"
+            systemPrompt += "in max 500 wrods"
             const res = await summarize(news);
             return res.content;
         }
 
-        systemPrompt += "in max 100 words"
+        systemPrompt += "in max 200 words"
         const results = await Promise.all(
             news.map(async (item, index) => {
                 const res = await summarize(item.content);
